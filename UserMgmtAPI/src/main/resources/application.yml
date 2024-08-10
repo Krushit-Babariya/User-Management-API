@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: UserMgmtAPI
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///krushit40db
+    username: root
+    password: krushit
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect 
+
+usermgmt:
+  messages:
+    save-success: User registered with id val
+    save-failure: Oops..!! Something went wrong
+    update-success: User data is updated
+    update-failure: User not found for updation
+    delete-success: User deleted with id val
+    delete-failure: User is not found for deletion
+    user-activation-success: Account avtivated with id val
+    user-activation-failure: Oops..!! Account not found for activation	
