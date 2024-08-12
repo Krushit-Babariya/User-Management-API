@@ -21,4 +21,9 @@ usermgmt:
     delete-success: User deleted with id val
     delete-failure: User is not found for deletion
     user-activation-success: Account avtivated with id val
-    user-activation-failure: Oops..!! Account not found for activation	
+    user-activation-failure: Oops..!! Account not found for activation
+    invalid-credentials: Oops..!! User account not found
+    valid-credentials: Welcome
+    inavtive-account: account is not active
+    status-updation-success: account status is updated as 
+    status-updation-fail: Oops..!! Something went wrong

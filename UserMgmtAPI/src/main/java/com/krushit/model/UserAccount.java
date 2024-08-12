@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserAccount {
+	private Integer userid;
 	private String name;
 	private String email;
 	private Long mobileNo;

@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecoverPassword {
 	private String uname;
+	private String email;
 	private String password;
 }
