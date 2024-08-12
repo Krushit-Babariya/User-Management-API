@@ -1,5 +1,7 @@
 package com.krushit.service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -206,6 +208,28 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 			sb.append(AlphaNumericString.charAt(index));
 		}
 		return sb.toString();
+	}
+
+	private String readEmailMessageBody(String fileName, String fullName, String pwd) throws Exception {
+		String mailBody = null;
+		String url = " ";
+		try (FileReader reader = new FileReader(fileName); BufferedReader br = new BufferedReader(reader)) {
+			// Read file content to StringBuffer object line by line
+			StringBuffer buffer = new StringBuffer();
+			String line = null;
+			do {
+				line = br.readLine();
+				buffer.append(line);
+			} while (line != null);
+			mailBody = buffer.toString();
+			mailBody.replace("{FULL-NAME}", fullName);
+			mailBody.replace("{PWD}", pwd);
+			mailBody.replace("{URL}", url);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		return mailBody;
 	}
 
 }
