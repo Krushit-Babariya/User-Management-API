@@ -8,7 +8,7 @@ import com.krushit.model.RecoverPassword;
 import com.krushit.model.UserAccount;
 
 public interface IUserMgmtService {
-    public String registerUser(UserAccount user);
+    public String registerUser(UserAccount user) throws Exception;
     public String activateUserAccount(ActivateUser user);
     public String login(LoginCredentials credentials);
     public List<UserAccount> listUsers();
@@ -17,5 +17,5 @@ public interface IUserMgmtService {
     public String updateUser(UserAccount user);
     public String deleteUserById(Integer id);
     public String changeUserStatus(Integer id, String status);
-    public String recoverPassword(RecoverPassword recover);
+    public String recoverPassword(RecoverPassword recover) throws Exception;
 }

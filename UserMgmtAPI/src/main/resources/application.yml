@@ -10,7 +10,21 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL8Dialect 
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  mail:
+    host: smtp.gmail.com
+    username: indian.red.cross.in@gmail.com
+    password: qjawsbalasifypda
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          port: 587
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 usermgmt:
   messages:
@@ -27,3 +41,9 @@ usermgmt:
     inavtive-account: account is not active
     status-updation-success: account status is updated as 
     status-updation-fail: Oops..!! Something went wrong
+
+mailBody:
+    registerUser:
+      location: classpath:com/krushit/service/user_registration_mail_body.txt.txt
+    recoverPass:
+       location: classpath:com/krushit/service/revcover_password.txt

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Example;
 
 import com.krushit.config.AppConfigProperties;
@@ -19,6 +20,7 @@ import com.krushit.model.LoginCredentials;
 import com.krushit.model.RecoverPassword;
 import com.krushit.model.UserAccount;
 import com.krushit.repository.IUsersRepository;
+import com.krushit.utils.EmailUtils;
 
 public class UserMgmtServiceImpl implements IUserMgmtService {
 
@@ -26,20 +28,29 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 	private IUsersRepository userRepo;
 	@Autowired
 	private Map<String, String> map;
+	@Autowired
+	private EmailUtils emailUtils;
+	@Autowired
+	private Environment env;
 
 	public UserMgmtServiceImpl(AppConfigProperties config) {
 		map = config.getMessages();
 	}
 
 	@Override
-	public String registerUser(UserAccount user) {
+	public String registerUser(UserAccount user) throws Exception {
 		// convert UserAccount to UserMaster data
 		UserMaster master = new UserMaster();
 		BeanUtils.copyProperties(user, master);
-
-		// set temp password
-		master.setPassword(getAlphaNumericString(8));
+		
+		String tempPwd = generatePassword();
+		master.setPassword(tempPwd);
 		master.setActive_sw("inactive");
+		
+		String subject= "User Registration Success";
+		String body = readEmailMessageBody(env.getProperty("mailBody.registerUser.location"), user.getName(), tempPwd); 
+		
+		emailUtils.sendEmailMessage(user.getEmail(), subject, body);
 
 		UserMaster savedMaster = userRepo.save(master);
 		return savedMaster != null ? map.get(UserConstants.SAVE_SUCCESS) + savedMaster.getUserid()
@@ -184,17 +195,23 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 	}
 
 	@Override
-	public String recoverPassword(RecoverPassword recover) {
+	public String recoverPassword(RecoverPassword recover) throws Exception {
 		UserMaster master = userRepo.findByNameAndEmail(recover.getEmail(), recover.getUname());
+		
 
 		if (master != null) {
 			String pwd = master.getPassword();
+			String subject= "Password Recovery Mail";
+			String body = readEmailMessageBody(env.getProperty("mailBody.recoverPass.location"), recover.getUname(), pwd); 
+			
+			emailUtils.sendEmailMessage(recover.getEmail(), subject, body);
 			return pwd;
 		}
 		return map.get(UserConstants.INVALID_CREDENTIALS);
 	}
 
-	private static String getAlphaNumericString(int n) {
+	private static String generatePassword() {
+		int n = 8;
 		// choose a Character random from this String
 		String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz@#)(*&^%$!";
 		// create StringBuffer size of AlphaNumericString

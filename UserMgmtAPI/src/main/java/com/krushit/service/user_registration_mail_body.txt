@@ -3,7 +3,7 @@ hi {FULL-NAME}, <br>
 Your user account registration process is completed.<br>
 <br>
 Please find your temporary password below:<br>
-<b>Temporary Password: {TEMP-PWD}</b><br>
+<b>Temporary Password: {PWD}</b><br>
 <br>
 <a href="{URL}">Click here to unlock your Account</a><br>
 <br>
