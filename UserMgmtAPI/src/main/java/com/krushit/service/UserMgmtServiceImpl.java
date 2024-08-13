@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
 
 import com.krushit.config.AppConfigProperties;
 import com.krushit.constants.UserConstants;
@@ -22,9 +23,10 @@ import com.krushit.model.UserAccount;
 import com.krushit.repository.IUsersRepository;
 import com.krushit.utils.EmailUtils;
 
+@Service
 public class UserMgmtServiceImpl implements IUserMgmtService {
 
-	@Autowired
+	/*@Autowired
 	private IUsersRepository userRepo;
 	@Autowired
 	private Map<String, String> map;
@@ -32,9 +34,23 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 	private EmailUtils emailUtils;
 	@Autowired
 	private Environment env;
-
+	
 	public UserMgmtServiceImpl(AppConfigProperties config) {
 		map = config.getMessages();
+	}*/
+
+	private final IUsersRepository userRepo;
+	private final EmailUtils emailUtils;
+	private final Environment env;
+	private final Map<String, String> map;
+
+	@Autowired
+	public UserMgmtServiceImpl(IUsersRepository userRepo, EmailUtils emailUtils, Environment env,
+			AppConfigProperties config) {
+		this.userRepo = userRepo;
+		this.emailUtils = emailUtils;
+		this.env = env;
+		this.map = config.getMessages(); // Initialize the map from AppConfigProperties
 	}
 
 	@Override
@@ -42,14 +58,14 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 		// convert UserAccount to UserMaster data
 		UserMaster master = new UserMaster();
 		BeanUtils.copyProperties(user, master);
-		
+
 		String tempPwd = generatePassword();
 		master.setPassword(tempPwd);
 		master.setActive_sw("inactive");
-		
-		String subject= "User Registration Success";
-		String body = readEmailMessageBody(env.getProperty("mailBody.registerUser.location"), user.getName(), tempPwd); 
-		
+
+		String subject = "User Registration Success";
+		String body = readEmailMessageBody(env.getProperty("mailBody.registerUser.location"), user.getName(), tempPwd);
+
 		emailUtils.sendEmailMessage(user.getEmail(), subject, body);
 
 		UserMaster savedMaster = userRepo.save(master);
@@ -197,13 +213,13 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 	@Override
 	public String recoverPassword(RecoverPassword recover) throws Exception {
 		UserMaster master = userRepo.findByNameAndEmail(recover.getEmail(), recover.getUname());
-		
 
 		if (master != null) {
 			String pwd = master.getPassword();
-			String subject= "Password Recovery Mail";
-			String body = readEmailMessageBody(env.getProperty("mailBody.recoverPass.location"), recover.getUname(), pwd); 
-			
+			String subject = "Password Recovery Mail";
+			String body = readEmailMessageBody(env.getProperty("mailBody.recoverPass.location"), recover.getUname(),
+					pwd);
+
 			emailUtils.sendEmailMessage(recover.getEmail(), subject, body);
 			return pwd;
 		}
@@ -213,7 +229,7 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 	private static String generatePassword() {
 		int n = 8;
 		// choose a Character random from this String
-		String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz@#)(*&^%$!";
+		String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvxyz";
 		// create StringBuffer size of AlphaNumericString
 		StringBuilder sb = new StringBuilder(n);
 
@@ -239,9 +255,8 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 				buffer.append(line);
 			} while (line != null);
 			mailBody = buffer.toString();
-			mailBody.replace("{FULL-NAME}", fullName);
-			mailBody.replace("{PWD}", pwd);
-			mailBody.replace("{URL}", url);
+			mailBody = mailBody.replace("{FULL-NAME}", fullName);
+			mailBody = mailBody.replace("{PWD}", pwd);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw e;

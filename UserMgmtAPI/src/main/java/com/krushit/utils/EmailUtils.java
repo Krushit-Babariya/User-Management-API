@@ -17,10 +17,12 @@ public class EmailUtils {
         boolean mailSentStatus = false;
         try {
             MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8"); // Enables HTML support
+
             helper.setSubject(subject);
             helper.setTo(toMail);
-            helper.setText(body);
+            helper.setText(body, true); 
+
             mailSender.send(message);
             mailSentStatus = true;
         } catch (Exception e) {

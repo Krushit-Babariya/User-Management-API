@@ -1,11 +1,70 @@
-hi {FULL-NAME}, <br>
-<br>
-Your user account registration process is completed.<br>
-<br>
-Please find your temporary password below:<br>
-<b>Temporary Password: {PWD}</b><br>
-<br>
-<a href="{URL}">Click here to unlock your Account</a><br>
-<br>
-<i>Thanks,</i><br>
-<i>Admin</i>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .email-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .email-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .email-body {
+            padding: 20px;
+        }
+        .email-footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+            border-top: 1px solid #dee2e6;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .email-link {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #28a745;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h2>Welcome to Our Service</h2>
+        </div>
+        <div class="email-body">
+            <p>Hi <strong>{FULL-NAME}</strong>,</p>
+            <p>Your user account registration process is completed.</p>
+            <p>Please find your temporary password below:</p>
+            <table class="table table-bordered" style="max-width: 400px; margin: auto;">
+                <tr>
+                    <td style="background-color: #f1f1f1;"><strong>Temporary Password:</strong></td>
+                    <td><strong>{PWD}</strong></td>
+                </tr>
+            </table>
+            <p class="text-center">
+                <a href="{URL}" class="email-link">Click here to unlock your Account</a>
+            </p>
+        </div>
+        <div class="email-footer">
+            <p>Thanks, <em>Admin</em></p>
+        </div>
+    </div>
+</body>
+</html>

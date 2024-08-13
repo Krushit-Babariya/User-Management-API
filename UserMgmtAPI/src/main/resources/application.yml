@@ -44,6 +44,9 @@ usermgmt:
 
 mailBody:
     registerUser:
-      location: classpath:com/krushit/service/user_registration_mail_body.txt.txt
+      location: src/main/java/com/krushit/service/user_registration_mail_body.txt
     recoverPass:
-       location: classpath:com/krushit/service/revcover_password.txt
+       location: src/main/java/com/krushit/service/revcover_password.txt
+
+server:
+    port: 4041

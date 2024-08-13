@@ -3,6 +3,7 @@ package com.krushit.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.aspectj.weaver.tools.Trace;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -32,7 +33,7 @@ public class UserMaster {
 	@Column(length = 30)
 	private String password;
 
-	@Column(length = 20)
+	@Column(length = 50, unique = true, nullable = false)
 	private String email;
 
 	private Long mobileNo;
