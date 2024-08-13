@@ -102,7 +102,9 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 
 	@Override
 	public String activateUserAccount(ActivateUser user) {
-		UserMaster entity = userRepo.findByEmailAndPassword(user.getEmail(), user.getPassword());
+		UserMaster entity = userRepo.findByEmailAndPassword(user.getEmail(), user.getTempPass());
+		System.out
+				.println("Activating account for email: " + user.getEmail() + " with password: " + user.getPassword());
 
 		if (entity == null) {
 			return map.get(UserConstants.USER_AVTIVATION_FAIL);
@@ -116,33 +118,53 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 		}
 	}
 
+	/*	@Override
+		public String login(LoginCredentials credentials) {
+			System.out.println("Credentials :: " +credentials.getEmail() + " : " + credentials.getPass());
+			UserMaster master = new UserMaster();
+			BeanUtils.copyProperties(credentials, master);
+	
+			Example<UserMaster> example = Example.of(master);
+			List<UserMaster> credential = userRepo.findAll(example);
+	
+			if (!credential.isEmpty()) {
+				return map.get(UserConstants.INVALID_CREDENTIALS);
+			} else {
+				if (credential.get(0).getActive_sw().equalsIgnoreCase("active")) {
+					return map.get(UserConstants.VALID_CREDENTIALS) + credential.get(0).getName();
+				}
+			}
+			return map.get(UserConstants.ACCOUNT_NOT_ACTIVE);
+		}*/
+
 	@Override
 	public String login(LoginCredentials credentials) {
-		UserMaster master = new UserMaster();
-		BeanUtils.copyProperties(credentials, master);
+		System.out.println("Credentials :: " + credentials.getEmail() + " : " + credentials.getPass());
 
-		Example<UserMaster> example = Example.of(master);
-		List<UserMaster> credential = userRepo.findAll(example);
+		// Retrieve user based on email and password
+		UserMaster master = userRepo.findByEmailAndPassword(credentials.getEmail(), credentials.getPass());
 
-		if (!credential.isEmpty()) {
+		if (master == null) {
 			return map.get(UserConstants.INVALID_CREDENTIALS);
 		} else {
-			if (credential.get(0).getActive_sw().equalsIgnoreCase("active")) {
-				return map.get(UserConstants.VALID_CREDENTIALS) + credential.get(0).getName();
+			// Check if the user is active
+			if ("active".equalsIgnoreCase(master.getActive_sw())) {
+				return map.get(UserConstants.VALID_CREDENTIALS) + master.getName();
+			} else {
+				return map.get(UserConstants.ACCOUNT_NOT_ACTIVE);
 			}
 		}
-		return map.get(UserConstants.ACCOUNT_NOT_ACTIVE);
 	}
 
 	@Override
 	public List<UserAccount> listUsers() {
 		List<UserMaster> list = userRepo.findAll();
-		List<UserAccount> listAcc = new ArrayList<UserAccount>();
+		List<UserAccount> listAcc = new ArrayList<>();
 
 		//convert UserMaster to UserAccounts object
 		list.forEach(account -> {
 			UserAccount user = new UserAccount();
-			BeanUtils.copyProperties(list, listAcc);
+			BeanUtils.copyProperties(account, user);
 			listAcc.add(user);
 		});
 
@@ -212,7 +234,7 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 
 	@Override
 	public String recoverPassword(RecoverPassword recover) throws Exception {
-		UserMaster master = userRepo.findByNameAndEmail(recover.getEmail(), recover.getUname());
+		UserMaster master = userRepo.findByNameAndEmail(recover.getUname(), recover.getEmail());
 
 		if (master != null) {
 			String pwd = master.getPassword();
@@ -252,7 +274,8 @@ public class UserMgmtServiceImpl implements IUserMgmtService {
 			String line = null;
 			do {
 				line = br.readLine();
-				buffer.append(line);
+				if(line != null)
+					buffer.append(line);
 			} while (line != null);
 			mailBody = buffer.toString();
 			mailBody = mailBody.replace("{FULL-NAME}", fullName);

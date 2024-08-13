@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class RecoverPassword {
 	private String uname;
 	private String email;
-	private String password;
 }
