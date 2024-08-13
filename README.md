@@ -62,5 +62,15 @@ The User Management API is a RESTful service designed to handle user information
 
 ## API Documentation
 
-The API documentation is available at:
+The API documentation is available at: http://localhost:8080/swagger-ui.html
 
+
+## Contributing
+
+If you would like to contribute to this project, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Create a new Pull Request.
