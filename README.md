@@ -2,23 +2,56 @@
 
 ## Overview
 
-The User Management API is a RESTful service designed to handle user information and authentication. This API allows for the management of user accounts, including operations such as creating, retrieving, updating, and deleting user profiles. It also provides secure authentication mechanisms for user login and registration.
+The User Management API is a RESTful service designed for managing user information and authentication. It supports operations for creating, retrieving, updating, and deleting user profiles and includes functionalities for secure user registration, login, and password recovery.
 
 ## Features
 
 - **User Management:** Create, read, update, and delete user profiles.
-- **Authentication:** Secure login and registration with JWT-based authentication.
-- **Error Handling:** Comprehensive error messages and validation for a better user experience.
+- **Authentication:** Secure login, user registration, and password recovery.
+- **Error Handling:** Detailed error messages and validation for better user experience.
+- **Email Notifications:** Automated emails for user registration and password recovery.
 - **API Documentation:** Interactive API documentation using Swagger.
 
 ## Technologies Used
 
 - **Backend Framework:** Spring Boot
 - **Programming Language:** Java
-- **Database:** [Specify database if used, e.g., MySQL, H2]
-- **Authentication:** JWT (JSON Web Tokens)
+- **Database:** MySQL
+- **Authentication:** Basic authentication (no JWT in the current implementation)
 - **API Documentation:** Swagger
 - **Build Tool:** Maven
+
+## API Endpoints
+
+- **User Management:**
+
+    - `POST /user-api/save` - Register a new user
+    - `GET /user-api/report` - List all users
+    - `GET /user-api/find/{id}` - Retrieve user details by ID
+    - `PUT /user-api/update` - Update user details
+    - `DELETE /user-api/delete/{id}` - Delete user by ID
+
+- **Authentication:**
+
+    - `POST /user-api/activate` - Activate a user account
+    - `POST /user-api/login` - Authenticate a user
+    - `POST /user-api/recoverPassword` - Recover a user's password
+
+- **Account Management:**
+
+    - `PATCH /user-api/changeStatus/{id}/{status}` - Change user status
+
+## API Documentation
+
+The API documentation is available at: [http://localhost:4041/swagger-ui.html](http://localhost:4041/swagger-ui.html)
+
+## Configuration
+
+The application configuration is defined in `application.yml` and includes settings for:
+
+- **Database connection** (MySQL)
+- **Email server** (SMTP for sending emails)
+- **Application-specific properties** (messages for success/failure responses)
 
 ## Installation
 
@@ -45,32 +78,3 @@ The User Management API is a RESTful service designed to handle user information
     ```bash
     mvn spring-boot:run
     ```
-
-## API Endpoints
-
-- **User Management:**
-
-    - `POST /api/users` - Create a new user
-    - `GET /api/users/{id}` - Retrieve user details by ID
-    - `PUT /api/users/{id}` - Update user details by ID
-    - `DELETE /api/users/{id}` - Delete user by ID
-
-- **Authentication:**
-
-    - `POST /api/auth/register` - Register a new user
-    - `POST /api/auth/login` - Authenticate a user and obtain a JWT
-
-## API Documentation
-
-The API documentation is available at: http://localhost:8080/swagger-ui.html
-
-
-## Contributing
-
-If you would like to contribute to this project, please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/YourFeature`).
-3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature/YourFeature`).
-5. Create a new Pull Request.
